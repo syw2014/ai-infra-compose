@@ -1,0 +1,33 @@
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: rag_db
+      TZ: Asia/Shanghai
+    ports:
+      - "5432:5432"
+    volumes:
+      - /data/docker/volumes/postgres:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      
+      
+ services:
+  db:
+    image: postgres:17
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postGre@2025
+      POSTGRES_DB: mydb
+      TZ: Asia/Shanghai
+    ports:
+      - "5432:5432"
+    volumes:
+      - /data/docker/volumes/postgres:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: always
