@@ -37,7 +37,7 @@ services:
 
   standalone:
     container_name: milvus-standalone
-    image: milvusdb/milvus:v2.6.4
+    image: milvusdb/milvus:v2.6.4-cpu
     command: ["milvus", "run", "standalone"]
     security_opt: # 警告：seccomp:unconfined 会降低容器的沙箱安全性。请评估其必要性，若非必须请移除。
     - seccomp:unconfined
@@ -57,8 +57,10 @@ services:
       - "19530:19530"
       - "9091:9091"
     depends_on:
-      - "etcd"
-      - "minio"
+      etcd:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
 
 networks:
   default:
