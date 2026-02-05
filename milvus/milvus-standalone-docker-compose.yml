@@ -37,7 +37,7 @@ services:
 
   standalone:
     container_name: milvus-standalone
-    image: milvusdb/milvus:v2.6.4-cpu
+    image: milvusdb/milvus:v2.6.4
     command: ["milvus", "run", "standalone"]
     security_opt: # 警告：seccomp:unconfined 会降低容器的沙箱安全性。请评估其必要性，若非必须请移除。
     - seccomp:unconfined
