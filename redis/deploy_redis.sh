@@ -4,14 +4,14 @@
  # @Email: jerryshi0110@gmail.com
  # @Date: 2026-02-06 10:41:47
  # @LastEditors: Jerry Shi
- # @LastEditTime: 2026-02-06 10:42:00
+ # @LastEditTime: 2026-02-06 10:43:47
  # @Description: file content
 ### 
 # 2. 添加执行权限(如果需要)
-chmod +x setup-redis.sh
+chmod +x setup_redis.sh
 
 # 3. 运行脚本
-./setup-redis.sh
+./setup_redis.sh
 
 # 4. 启动Redis
 sudo docker-compose up -d
