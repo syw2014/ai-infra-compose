@@ -15,3 +15,9 @@ chmod +x setup_redis.sh
 
 # 4. 启动Redis
 sudo docker-compose up -d
+
+echo ""
+echo "✓ Redis deployed."
+echo "  Port: 19531 (host) -> 6379 (container)"
+echo "  Config: ./redis.conf"
+echo "  Data:  ./volumes/redis"
