@@ -1,5 +1,4 @@
 version: '3.5'
-
 services:
   etcd:
     container_name: milvus-etcd
@@ -21,9 +20,10 @@ services:
   minio:
     container_name: milvus-minio
     image: minio/minio:RELEASE.2024-12-18T13-15-44Z
-    env_file:
-      - .env # 生产环境请务必创建 .env 文件并设置 MINIO_ACCESS_KEY 和 MINIO_SECRET_KEY 为强密码
-    ports: # 警告：生产环境中应限制此端口的公网暴露，建议通过反向代理或内部网络访问。
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
       - "9001:9001"
       - "9000:9000"
     volumes:
@@ -39,12 +39,14 @@ services:
     container_name: milvus-standalone
     image: milvusdb/milvus:v2.6.4
     command: ["milvus", "run", "standalone"]
-    security_opt: # 警告：seccomp:unconfined 会降低容器的沙箱安全性。请评估其必要性，若非必须请移除。
-    - seccomp:unconfined
+    security_opt:
+      - seccomp:unconfined
     environment:
       ETCD_ENDPOINTS: etcd:2379
       MINIO_ADDRESS: minio:9000
-      MQ_TYPE: woodpecker
+      MINIO_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      MINIO_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+      MINIO_USE_SSL: "false"
     volumes:
       - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/milvus:/var/lib/milvus
     healthcheck:
@@ -53,7 +55,7 @@ services:
       start_period: 90s
       timeout: 20s
       retries: 3
-    ports: # 警告：生产环境中应限制此端口的公网暴露，建议通过反向代理或内部网络访问。
+    ports:
       - "19530:19530"
       - "9091:9091"
     depends_on:
