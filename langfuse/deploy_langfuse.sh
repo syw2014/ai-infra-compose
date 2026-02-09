@@ -97,7 +97,7 @@ version: "3.5"
 services:
   # ===== ClickHouse (新部署) =====
   clickhouse:
-    image: docker.io/clickhouse/clickhouse-server:24.1-alpine
+    image: docker.io/clickhouse/clickhouse-server
     user: "101:101"
     container_name: ${CLICKHOUSE_CONTAINER_NAME:-langfuse-clickhouse}
     environment:
