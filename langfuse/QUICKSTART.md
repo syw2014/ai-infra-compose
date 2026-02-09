@@ -24,7 +24,7 @@
 
 ## URLs
 
-- **Langfuse**: http://localhost:3000
+- **Langfuse**: http://localhost:19532
 - **ClickHouse**: http://localhost:8123
 - **MinIO Console**: http://localhost:9001
 

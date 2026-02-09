@@ -35,7 +35,7 @@ The script will:
 7. Initialize PostgreSQL database and MinIO bucket
 8. Start Langfuse services
 
-**Access Langfuse**: http://localhost:3000
+**Access Langfuse**: http://localhost:19532
 
 ## Management Commands
 

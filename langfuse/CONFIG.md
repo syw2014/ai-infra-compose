@@ -97,7 +97,7 @@ docker compose logs -f
 
 ## 服务访问
 
-- **Langfuse Web UI**: http://localhost:3000
+- **Langfuse Web UI**: http://localhost:19532
 - **ClickHouse HTTP API**: http://localhost:8123
 - **MinIO Console**: http://localhost:9001
 

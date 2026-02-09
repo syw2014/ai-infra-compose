@@ -67,13 +67,13 @@ docker compose ps
 docker compose logs -f
 
 # 测试服务
-curl http://localhost:3000           # Langfuse Web
+curl http://localhost:19532           # Langfuse Web
 curl http://localhost:8123/ping      # ClickHouse
 ```
 
 ## 服务地址
 
-- **Langfuse**: http://localhost:3000
+- **Langfuse**: http://localhost:19532
 - **ClickHouse**: http://localhost:8123
 - **MinIO Console**: http://localhost:9001
 

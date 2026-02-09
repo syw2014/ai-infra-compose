@@ -38,7 +38,7 @@ cd langfuse/
 ./deploy_langfuse.sh
 
 # 3. 访问服务
-open http://localhost:3000
+open http://localhost:19532
 ```
 
 ### 日常管理
