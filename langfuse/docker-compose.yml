@@ -34,7 +34,7 @@ services:
       clickhouse:
         condition: service_healthy
     ports:
-      - ${WEB_HOST_PORT:-3000}:3000
+      - ${WEB_HOST_PORT:-19532}:3000
     env_file:
       - .env
     restart: unless-stopped
