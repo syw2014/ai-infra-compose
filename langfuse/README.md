@@ -67,8 +67,8 @@ docker compose down             # Stop and remove
 
 | Component | Port | Description |
 |-----------|------|-------------|
-| Langfuse Web | 3000 | Web UI and API |
-| ClickHouse HTTP | 8123 | Analytics database |
+| Langfuse Web | 19532 | Web UI and API |
+| ClickHouse HTTP | 19533 | Analytics database |
 | ClickHouse Native | 9900 | Internal protocol |
 | PostgreSQL* | 5432 | Main database (external) |
 | Redis* | 19531 | Cache & queue (external) |
@@ -140,7 +140,7 @@ docker exec milvus-minio mc ls local/langfuse
 docker compose logs clickhouse
 
 # Test health endpoint
-curl http://localhost:8123/ping
+curl http://localhost:19533/ping
 ```
 
 ## Backup & Restore
@@ -186,7 +186,7 @@ If default ports conflict, edit `.env` before deployment:
 
 ```bash
 WEB_HOST_PORT=3000              # Langfuse web UI
-CLICKHOUSE_HTTP_PORT=8123       # ClickHouse HTTP API
+CLICKHOUSE_HTTP_PORT=19533       # ClickHouse HTTP API
 CLICKHOUSE_NATIVE_PORT=9900     # ClickHouse native (changed from 9000 to avoid MinIO conflict)
 ```
 

@@ -26,7 +26,7 @@ docker logs langfuse-worker --tail 50
 
 # 4. 测试服务访问
 curl -I http://localhost:19532  # Langfuse Web
-curl http://localhost:8123/ping  # ClickHouse
+curl http://localhost:19533/ping  # ClickHouse
 ```
 
 ## 常见问题排查
@@ -147,7 +147,7 @@ docker ps --filter "name=langfuse" --format "table {{.Names}}\t{{.Status}}"
 echo ""
 
 echo "2. ClickHouse:"
-curl -s http://localhost:8123/ping && echo " ✓" || echo " ✗"
+curl -s http://localhost:19533/ping && echo " ✓" || echo " ✗"
 echo ""
 
 echo "3. Langfuse Web:"

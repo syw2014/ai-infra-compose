@@ -25,7 +25,7 @@
 ## URLs
 
 - **Langfuse**: http://localhost:19532
-- **ClickHouse**: http://localhost:8123
+- **ClickHouse**: http://localhost:19533
 - **MinIO Console**: http://localhost:9001
 
 ## Default Credentials (MinIO)
@@ -49,7 +49,7 @@ grep DATABASE_URL .env  # Check connection string
 docker exec milvus-minio mc ls local/langfuse  # Verify bucket
 
 # Fix: ClickHouse unhealthy
-curl http://localhost:8123/ping  # Test health
+curl http://localhost:19533/ping  # Test health
 
 # Fix: Service won't start
 docker compose logs langfuse-web  # Check logs

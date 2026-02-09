@@ -48,7 +48,7 @@ check_tcp() {
 
 echo -e "${YELLOW}Checking Langfuse services...${NC}"
 check_service "Langfuse Web" "http://localhost:3000"
-check_service "ClickHouse HTTP" "http://localhost:8123/ping"
+check_service "ClickHouse HTTP" "http://localhost:19533/ping"
 
 echo ""
 echo -e "${YELLOW}Checking dependencies...${NC}"

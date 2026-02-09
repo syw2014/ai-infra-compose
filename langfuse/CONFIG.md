@@ -98,7 +98,7 @@ docker compose logs -f
 ## 服务访问
 
 - **Langfuse Web UI**: http://localhost:19532
-- **ClickHouse HTTP API**: http://localhost:8123
+- **ClickHouse HTTP API**: http://localhost:19533
 - **MinIO Console**: http://localhost:9001
 
 ## 外部组件端口
@@ -151,7 +151,7 @@ docker compose exec langfuse-web sh -c "nc -zv host.docker.internal 19531"
 docker compose exec langfuse-web sh -c "nc -zv host.docker.internal 9000"
 
 # 检查 ClickHouse 健康状态
-curl http://localhost:8123/ping
+curl http://localhost:19533/ping
 ```
 
 ### 查看详细日志

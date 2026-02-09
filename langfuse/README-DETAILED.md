@@ -152,7 +152,7 @@ services:
       - ${HOST_IP:-127.0.0.1}:${CLICKHOUSE_HTTP_PORT:-8123}:8123
       - ${HOST_IP:-127.0.0.1}:${CLICKHOUSE_NATIVE_PORT:-9900}:9000
     healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1
+      test: wget --no-verbose --tries=1 --spider http://localhost:19533/ping || exit 1
       interval: 5s
       timeout: 5s
       retries: 10
@@ -214,7 +214,7 @@ cp .env.dev.example .env
 # 端口配置
 # ============================================
 WEB_HOST_PORT=3000
-CLICKHOUSE_HTTP_PORT=8123
+CLICKHOUSE_HTTP_PORT=19533
 CLICKHOUSE_NATIVE_PORT=9900
 
 # ============================================
@@ -471,7 +471,7 @@ docker compose logs -f clickhouse
 
 ```bash
 # 检查 ClickHouse 健康状态
-curl http://localhost:8123/ping
+curl http://localhost:19533/ping
 
 # 检查 Langfuse Web 服务
 curl -I http://localhost:3000
@@ -728,7 +728,7 @@ netstat -tulpn | grep -E "8123|9900"
 
 3. **手动测试健康检查**
 ```bash
-docker compose exec clickhouse wget -q -O - http://localhost:8123/ping
+docker compose exec clickhouse wget -q -O - http://localhost:19533/ping
 ```
 
 4. **重启 ClickHouse**
@@ -1139,7 +1139,7 @@ else
 fi
 
 # ClickHouse
-if curl -sf http://localhost:8123/ping > /dev/null; then
+if curl -sf http://localhost:19533/ping > /dev/null; then
     echo "✅ ClickHouse: 正常"
 else
     echo "❌ ClickHouse: 异常"

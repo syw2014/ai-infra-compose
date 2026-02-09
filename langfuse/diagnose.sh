@@ -31,9 +31,9 @@ echo ""
 # 3. 检查 ClickHouse
 echo -e "${YELLOW}3. ClickHouse 健康检查${NC}"
 echo "----------------------------------------"
-if curl -sf http://localhost:8123/ping > /dev/null 2>&1; then
-    echo -e "${GREEN}✓ ClickHouse HTTP 正常 (port 8123)${NC}"
-    curl -s http://localhost:8123/ping
+if curl -sf http://localhost:19533/ping > /dev/null 2>&1; then
+    echo -e "${GREEN}✓ ClickHouse HTTP 正常 (port 19533)${NC}"
+    curl -s http://localhost:19533/ping
 else
     echo -e "${RED}✗ ClickHouse HTTP 无响应${NC}"
 fi
