@@ -160,3 +160,4 @@ volumes:
     driver: local
   langfuse_clickhouse_logs:
     driver: local
+ 
