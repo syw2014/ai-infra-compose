@@ -79,11 +79,11 @@ if [ -f ".env" ]; then
     echo -e "${YELLOW}⚠️  Existing .env backed up to $BACKUP_NAME${NC}"
 fi
 
-# Generate secrets
+# Generate secrets (using hex to avoid special characters that might cause issues)
 NEXTAUTH_SECRET=$(openssl rand -hex 32)
 SALT=$(openssl rand -hex 32)
 ENCRYPTION_KEY=$(openssl rand -hex 32)
-CLICKHOUSE_PASSWORD=$(openssl rand -hex 32)
+CLICKHOUSE_PASSWORD=$(openssl rand -hex 16)
 
 echo -e "${GREEN}✓ Secrets generated${NC}"
 echo ""

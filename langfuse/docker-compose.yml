@@ -138,6 +138,8 @@ services:
     image: docker.io/clickhouse/clickhouse-server
     restart: always
     user: "101:101"
+    env_file:
+      - .env
     environment:
       CLICKHOUSE_DB: default
       CLICKHOUSE_USER: ${CLICKHOUSE_USER:-clickhouse}
