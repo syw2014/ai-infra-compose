@@ -8,6 +8,7 @@
 - `milvus/` — 向量数据库服务。
 - `elasticsearch/` — 搜索与日志索引。
 - `minio/` — 兼容 S3 的对象存储。
+- `xinference/` — CPU 推理服务，用于 Embedding 和 Rerank 模型。
 
 ## 使用方法
 1) 选择组件目录并放置你的 `docker-compose.yml`（或复制示例）。  
