@@ -11,5 +11,13 @@ cd "$(dirname "$0")"
 
 echo "Creating Xinference volume directories..."
 mkdir -p ./volumes/xinference
+mkdir -p ./volumes/models/huggingface
+mkdir -p ./volumes/models/modelscope
 
-echo "✓ Volume directory ready: ./volumes/xinference"
+echo "✓ Volume directories ready:"
+echo "   ./volumes/xinference           — Xinference config & registry"
+echo "   ./volumes/models/huggingface   — HuggingFace model cache"
+echo "   ./volumes/models/modelscope    — ModelScope model cache"
+echo ""
+echo "Tip: Pre-downloaded model files can be placed directly into these"
+echo "     directories before starting the container."

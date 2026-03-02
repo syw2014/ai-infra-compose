@@ -8,9 +8,17 @@ services:
     ports:
       - "9997:9997"
     volumes:
+      # Xinference config & model registry metadata
       - ./volumes/xinference:/root/.xinference
+      # HuggingFace model cache (pre-downloaded models go here too)
+      - ./volumes/models/huggingface:/root/.cache/huggingface
+      # ModelScope model cache (pre-downloaded models go here too)
+      - ./volumes/models/modelscope:/root/.cache/modelscope
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+    environment:
+      - HF_HOME=/root/.cache/huggingface
+      - MODELSCOPE_CACHE=/root/.cache/modelscope
     command: xinference-local --host 0.0.0.0 --port 9997
     restart: unless-stopped
     healthcheck:
