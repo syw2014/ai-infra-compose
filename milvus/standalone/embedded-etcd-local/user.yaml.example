@@ -1,0 +1,45 @@
+# Example overrides for Milvus 2.6.x standalone with local storage.
+
+localStorage:
+  path: /var/lib/milvus/data
+
+queryNode:
+  scheduler:
+    maxReadConcurrentRatio: 1.0
+  segcore:
+    chunkRows: 128
+
+dataNode:
+  segment:
+    insertBufSize: 16777216
+    deleteBufBytes: 16777216
+    syncPeriod: 60
+  memory:
+    forceSyncEnable: true
+    forceSyncWatermark: 0.35
+
+dataCoord:
+  enableCompaction: true
+  compaction:
+    enableAutoCompaction: true
+    indexBasedCompaction: true
+  segment:
+    maxSize: 128
+    sealProportion: 0.23
+    assignmentExpiration: 2000
+    maxLife: 86400
+
+etcd:
+  use:
+    embed: true
+  data:
+    dir: /var/lib/milvus/etcd
+  requestTimeout: 10000
+
+log:
+  level: warn
+  file:
+    rootPath: /var/lib/milvus/logs
+    maxSize: 100
+    maxBackups: 5
+    maxAge: 7

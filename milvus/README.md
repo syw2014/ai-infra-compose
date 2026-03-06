@@ -1,7 +1,11 @@
-# Milvus preset
+# Milvus deployment presets
 
-Drop your Milvus `docker-compose.yml` here. Common guidance:
-- Decide on standalone vs distributed; standalone typically bundles etcd and MinIO.
-- Persist data and metadata volumes (e.g., `/var/lib/milvus` and `/etcd`).
-- Allocate enough resources (RAM/CPU) for index building; set `MILVUS_CACHE_SIZE` appropriately.
-- If exposing externally, secure ports and credentials; consider a reverse proxy for TLS.
+This directory is organized by deployment mode first, not by file type.
+
+## Layout
+- `docker-compose/standalone-minio/` - Docker Compose deployment with standalone Milvus, external etcd container, and bundled MinIO.
+- `standalone/embedded-etcd-local/` - Single-node deployment with `docker run`, embedded etcd, and local storage instead of MinIO.
+
+## Which one to choose
+- Choose `docker-compose/standalone-minio/` when you want a conventional Compose stack and S3-compatible object storage.
+- Choose `standalone/embedded-etcd-local/` when you want the simplest single-node deployment and do not want MinIO.
