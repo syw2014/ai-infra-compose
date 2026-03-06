@@ -28,6 +28,14 @@ dataCoord:
     sealProportion: 0.23
     assignmentExpiration: 2000
     maxLife: 86400
+    maxIdleTime: 120
+    minSizeFromIdleToSealed: 16
+
+rocksmq:
+  path: /var/lib/milvus/rdb_data
+  retentionTimeInMinutes: 4320
+  retentionSizeInMB: 8192
+  compactionInterval: 86400
 
 etcd:
   use:
