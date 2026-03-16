@@ -15,9 +15,11 @@ xinference/
 ├── docker-compose.yml            # Xinference 容器编排
 ├── env.example                   # 环境变量模板
 ├── create_xinference_volumes.sh  # 创建本地卷目录
+├── download_model.sh             # 预下载模型到本地缓存
 ├── deploy_xinference.sh          # 一键部署脚本
 └── volumes/
-    └── xinference/               # 模型缓存与配置（自动创建）
+    ├── xinference/               # Xinference 配置与注册信息（自动创建）
+    └── models/                   # HuggingFace / ModelScope 缓存（自动创建）
 ```
 
 ## 快速部署
@@ -32,6 +34,34 @@ chmod +x deploy_xinference.sh
 2. 创建本地卷目录
 3. 拉取镜像并启动服务
 4. 等待健康检查通过
+
+## 预下载模型
+
+为避免容器启动后再在线下载模型，可以先将模型权重下载到挂载目录，Xinference 启动后会直接复用本地缓存。
+
+```bash
+# 使用 ModelScope 预下载
+chmod +x download_model.sh
+./download_model.sh --source modelscope --preset bge-m3
+./download_model.sh --source modelscope --preset bge-reranker-v2-m3
+
+# 使用 HuggingFace 预下载
+./download_model.sh --source huggingface --preset bge-m3
+./download_model.sh --source huggingface --preset bge-reranker-v2-m3
+```
+
+也支持传任意上游仓库 ID：
+
+```bash
+./download_model.sh --source huggingface --repo-id BAAI/bge-large-zh-v1.5
+./download_model.sh --source modelscope --repo-id Xorbits/bge-large-zh-v1___5
+```
+
+注意：
+
+- `XINFERENCE_MODEL_SRC` 必须与预下载使用的 `--source` 保持一致，否则 Xinference 会去另一套缓存目录查找模型。
+- 脚本复用了 `xprobe/xinference:latest-cpu` 镜像执行下载，宿主机无需额外安装 `huggingface_hub` 或 `modelscope`。
+- 如需使用 HuggingFace 镜像站，可在 `.env` 中设置 `HF_ENDPOINT`。
 
 ## 服务信息
 
@@ -137,3 +167,5 @@ docker compose down -v
 | bge-reranker-base      | Rerank    | ~280 MB   | 轻量中英文        |
 
 > 模型首次启动时自动从 ModelScope / HuggingFace 下载，之后命中本地缓存。
+>
+> 如果已通过 `./download_model.sh` 预下载，容器启动后会直接复用缓存，通常不再需要在线下载。
