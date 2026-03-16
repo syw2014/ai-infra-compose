@@ -106,6 +106,25 @@ chmod +x ./create_xinference_volumes.sh
 HF_CACHE_DIR="${PWD}/volumes/models/huggingface"
 MODELSCOPE_CACHE_DIR="${PWD}/volumes/models/modelscope"
 
+ensure_writable_dir() {
+    local dir="$1"
+    local label="$2"
+
+    mkdir -p "${dir}"
+
+    if [ ! -w "${dir}" ]; then
+        echo -e "${RED}${label} is not writable: ${dir}${NC}"
+        echo -e "${YELLOW}Fix ownership or permissions, for example:${NC}"
+        echo "  sudo chown -R \"$(id -u)\":\"$(id -g)\" \"${dir}\""
+        echo "  chmod -R u+rwX \"${dir}\""
+        exit 1
+    fi
+}
+
+ensure_writable_dir "${HF_CACHE_DIR}" "HuggingFace cache directory"
+ensure_writable_dir "${MODELSCOPE_CACHE_DIR}" "ModelScope cache directory"
+ensure_writable_dir "${MODELSCOPE_CACHE_DIR}/.lock" "ModelScope lock directory"
+
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}  Xinference Model Pre-download${NC}"
 echo -e "${BLUE}========================================${NC}"
