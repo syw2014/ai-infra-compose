@@ -16,32 +16,26 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 SOURCE=""
-REPO_ID=""
+MODEL_ID=""
 REVISION=""
-PRESET=""
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 
 print_usage() {
     cat <<'EOF'
 Usage:
-  ./download_model.sh [--source modelscope|huggingface] [--preset PRESET] [--repo-id REPO_ID] [--revision REVISION]
+  ./download_model.sh [--source modelscope|huggingface] --model-id MODEL_ID [--revision REVISION]
 
 Options:
   --source      Download source, defaults to XINFERENCE_MODEL_SRC in .env, or modelscope
-  --preset      Built-in model preset:
-                bge-m3
-                bge-small-en-v1.5
-                bge-reranker-v2-m3
-                bge-reranker-base
-  --repo-id     Upstream repo/model id. Required when --preset is not provided
+  --model-id    Upstream model id, for example BAAI/bge-m3 or Xorbits/bge-m3
   --revision    Optional revision / branch / tag
   --python      Python executable, default: python3
   -h, --help    Show this help message
 
 Examples:
-  ./download_model.sh --source modelscope --preset bge-m3
-  ./download_model.sh --source huggingface --preset bge-reranker-v2-m3
-  ./download_model.sh --source huggingface --repo-id BAAI/bge-m3
+  ./download_model.sh --source modelscope --model-id Xorbits/bge-m3
+  ./download_model.sh --source huggingface --model-id BAAI/bge-reranker-v2-m3
+  ./download_model.sh --source huggingface --model-id BAAI/bge-m3
 EOF
 }
 
@@ -60,16 +54,12 @@ while [ $# -gt 0 ]; do
             SOURCE="$2"
             shift 2
             ;;
-        --repo-id)
-            REPO_ID="$2"
-            shift 2
-            ;;
         --revision)
             REVISION="$2"
             shift 2
             ;;
-        --preset)
-            PRESET="$2"
+        --model-id)
+            MODEL_ID="$2"
             shift 2
             ;;
         --python)
@@ -99,47 +89,9 @@ case "$SOURCE" in
         ;;
 esac
 
-if [ -n "$PRESET" ] && [ -n "$REPO_ID" ]; then
-    echo -e "${RED}Use either --preset or --repo-id, not both.${NC}"
-    exit 1
-fi
-
-if [ -n "$PRESET" ]; then
-    case "${SOURCE}:${PRESET}" in
-        modelscope:bge-m3)
-            REPO_ID="Xorbits/bge-m3"
-            ;;
-        huggingface:bge-m3)
-            REPO_ID="BAAI/bge-m3"
-            ;;
-        modelscope:bge-small-en-v1.5)
-            REPO_ID="Xorbits/bge-small-en-v1___5"
-            ;;
-        huggingface:bge-small-en-v1.5)
-            REPO_ID="BAAI/bge-small-en-v1.5"
-            ;;
-        modelscope:bge-reranker-v2-m3)
-            REPO_ID="Xorbits/bge-reranker-v2-m3"
-            ;;
-        huggingface:bge-reranker-v2-m3)
-            REPO_ID="BAAI/bge-reranker-v2-m3"
-            ;;
-        modelscope:bge-reranker-base)
-            REPO_ID="Xorbits/bge-reranker-base"
-            ;;
-        huggingface:bge-reranker-base)
-            REPO_ID="BAAI/bge-reranker-base"
-            ;;
-        *)
-            echo -e "${RED}Unsupported preset '${PRESET}' for source '${SOURCE}'.${NC}"
-            exit 1
-            ;;
-    esac
-fi
-
-if [ -z "$REPO_ID" ]; then
-    echo -e "${RED}Missing model repo id.${NC}"
-    echo -e "${YELLOW}Pass --preset or --repo-id.${NC}"
+if [ -z "$MODEL_ID" ]; then
+    echo -e "${RED}Missing model id.${NC}"
+    echo -e "${YELLOW}Pass --model-id.${NC}"
     exit 1
 fi
 
@@ -158,7 +110,7 @@ echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}  Xinference Model Pre-download${NC}"
 echo -e "${BLUE}========================================${NC}"
 echo "Source:     ${SOURCE}"
-echo "Repo ID:    ${REPO_ID}"
+echo "Model ID:   ${MODEL_ID}"
 if [ -n "$REVISION" ]; then
     echo "Revision:   ${REVISION}"
 fi
@@ -193,7 +145,7 @@ if [ "${SOURCE}" = "huggingface" ]; then
 from huggingface_hub import snapshot_download
 
 local_dir = snapshot_download(
-    repo_id="${REPO_ID}",
+    repo_id="${MODEL_ID}",
     revision="${REVISION}",
     cache_dir="${HF_CACHE_DIR}",
     local_dir=None,
@@ -207,7 +159,7 @@ else
 from modelscope.hub.snapshot_download import snapshot_download
 
 local_dir = snapshot_download(
-    model_id="${REPO_ID}",
+    model_id="${MODEL_ID}",
     revision="${REVISION}" or None,
     cache_dir="${MODELSCOPE_CACHE_DIR}",
 )

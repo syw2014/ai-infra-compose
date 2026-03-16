@@ -42,19 +42,19 @@ chmod +x deploy_xinference.sh
 ```bash
 # 使用 ModelScope 预下载
 chmod +x download_model.sh
-./download_model.sh --source modelscope --preset bge-m3
-./download_model.sh --source modelscope --preset bge-reranker-v2-m3
+./download_model.sh --source modelscope --model-id Xorbits/bge-m3
+./download_model.sh --source modelscope --model-id Xorbits/bge-reranker-v2-m3
 
 # 使用 HuggingFace 预下载
-./download_model.sh --source huggingface --preset bge-m3
-./download_model.sh --source huggingface --preset bge-reranker-v2-m3
+./download_model.sh --source huggingface --model-id BAAI/bge-m3
+./download_model.sh --source huggingface --model-id BAAI/bge-reranker-v2-m3
 ```
 
-也支持传任意上游仓库 ID：
+直接传上游模型 ID 即可：
 
 ```bash
-./download_model.sh --source huggingface --repo-id BAAI/bge-large-zh-v1.5
-./download_model.sh --source modelscope --repo-id Xorbits/bge-large-zh-v1___5
+./download_model.sh --source huggingface --model-id BAAI/bge-large-zh-v1.5
+./download_model.sh --source modelscope --model-id Xorbits/bge-large-zh-v1___5
 ```
 
 注意：
