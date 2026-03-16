@@ -60,7 +60,8 @@ chmod +x download_model.sh
 注意：
 
 - `XINFERENCE_MODEL_SRC` 必须与预下载使用的 `--source` 保持一致，否则 Xinference 会去另一套缓存目录查找模型。
-- 脚本复用了 `xprobe/xinference:latest-cpu` 镜像执行下载，宿主机无需额外安装 `huggingface_hub` 或 `modelscope`。
+- 脚本直接调用 Python SDK 下载模型：`huggingface_hub` 或 `modelscope`。
+- 运行前请在宿主机安装对应依赖，例如 `python3 -m pip install -U huggingface_hub` 或 `python3 -m pip install -U modelscope`。
 - 如需使用 HuggingFace 镜像站，可在 `.env` 中设置 `HF_ENDPOINT`。
 
 ## 服务信息

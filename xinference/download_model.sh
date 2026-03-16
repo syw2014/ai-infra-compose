@@ -3,7 +3,7 @@
 # @Author: Jerry Shi
 # @Email: jerryshi0110@gmail.com
 # @Date: 2026-03-16
-# @Description: Pre-download Xinference models into local cache volumes
+# @Description: Pre-download Xinference models into local cache volumes via SDKs
 ###
 
 set -euo pipefail
@@ -15,11 +15,11 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-IMAGE="xprobe/xinference:latest-cpu"
 SOURCE=""
 REPO_ID=""
 REVISION=""
 PRESET=""
+PYTHON_BIN="${PYTHON_BIN:-python3}"
 
 print_usage() {
     cat <<'EOF'
@@ -35,6 +35,7 @@ Options:
                 bge-reranker-base
   --repo-id     Upstream repo/model id. Required when --preset is not provided
   --revision    Optional revision / branch / tag
+  --python      Python executable, default: python3
   -h, --help    Show this help message
 
 Examples:
@@ -69,6 +70,10 @@ while [ $# -gt 0 ]; do
             ;;
         --preset)
             PRESET="$2"
+            shift 2
+            ;;
+        --python)
+            PYTHON_BIN="$2"
             shift 2
             ;;
         -h|--help)
@@ -138,70 +143,77 @@ if [ -z "$REPO_ID" ]; then
     exit 1
 fi
 
+if ! command -v "${PYTHON_BIN}" >/dev/null 2>&1; then
+    echo -e "${RED}Python executable not found: ${PYTHON_BIN}${NC}"
+    exit 1
+fi
+
 chmod +x ./create_xinference_volumes.sh
 ./create_xinference_volumes.sh > /dev/null
+
+HF_CACHE_DIR="${PWD}/volumes/models/huggingface"
+MODELSCOPE_CACHE_DIR="${PWD}/volumes/models/modelscope"
 
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}  Xinference Model Pre-download${NC}"
 echo -e "${BLUE}========================================${NC}"
-echo "Source:    ${SOURCE}"
-echo "Repo ID:   ${REPO_ID}"
+echo "Source:     ${SOURCE}"
+echo "Repo ID:    ${REPO_ID}"
 if [ -n "$REVISION" ]; then
-    echo "Revision:  ${REVISION}"
+    echo "Revision:   ${REVISION}"
 fi
-echo "Image:     ${IMAGE}"
+echo "Python:     ${PYTHON_BIN}"
 echo ""
 
-DOCKER_ARGS=(
-    run --rm
-    -v "$PWD/volumes/models/huggingface:/root/.cache/huggingface"
-    -v "$PWD/volumes/models/modelscope:/root/.cache/modelscope"
-    -e "HF_HOME=/root/.cache/huggingface"
-    -e "MODELSCOPE_CACHE=/root/.cache/modelscope"
-)
-
-if [ -n "${HF_ENDPOINT:-}" ]; then
-    DOCKER_ARGS+=(-e "HF_ENDPOINT=${HF_ENDPOINT}")
+if [ "${SOURCE}" = "huggingface" ]; then
+    if ! "${PYTHON_BIN}" -c "import huggingface_hub" >/dev/null 2>&1; then
+        echo -e "${RED}Missing Python dependency: huggingface_hub${NC}"
+        echo -e "${YELLOW}Install it with:${NC}"
+        echo "  ${PYTHON_BIN} -m pip install -U huggingface_hub"
+        exit 1
+    fi
+else
+    if ! "${PYTHON_BIN}" -c "import modelscope" >/dev/null 2>&1; then
+        echo -e "${RED}Missing Python dependency: modelscope${NC}"
+        echo -e "${YELLOW}Install it with:${NC}"
+        echo "  ${PYTHON_BIN} -m pip install -U modelscope"
+        exit 1
+    fi
 fi
 
-PYTHON_CODE='
-import os
+export HF_HOME="${HF_CACHE_DIR}"
+export MODELSCOPE_CACHE="${MODELSCOPE_CACHE_DIR}"
+export HF_HUB_DISABLE_SYMLINKS_WARNING=1
+if [ -n "${HF_ENDPOINT:-}" ]; then
+    export HF_ENDPOINT
+fi
 
-source = os.environ["DOWNLOAD_SOURCE"]
-repo_id = os.environ["DOWNLOAD_REPO_ID"]
-revision = os.environ.get("DOWNLOAD_REVISION") or None
+if [ "${SOURCE}" = "huggingface" ]; then
+    "${PYTHON_BIN}" - <<PY
+from huggingface_hub import snapshot_download
 
-if source == "huggingface":
-    from huggingface_hub import snapshot_download
-
-    local_dir = snapshot_download(
-        repo_id=repo_id,
-        revision=revision,
-        local_dir=None,
-        local_dir_use_symlinks=False,
-        resume_download=True,
-    )
-elif source == "modelscope":
-    from modelscope.hub.snapshot_download import snapshot_download
-
-    local_dir = snapshot_download(
-        model_id=repo_id,
-        revision=revision,
-    )
-else:
-    raise SystemExit(f"unsupported source: {source}")
-
+local_dir = snapshot_download(
+    repo_id="${REPO_ID}",
+    revision="${REVISION}",
+    cache_dir="${HF_CACHE_DIR}",
+    local_dir=None,
+    local_dir_use_symlinks=False,
+    resume_download=True,
+)
 print(local_dir)
-'
+PY
+else
+    "${PYTHON_BIN}" - <<PY
+from modelscope.hub.snapshot_download import snapshot_download
 
-set -x
-sudo docker "${DOCKER_ARGS[@]}" \
-    -e "DOWNLOAD_SOURCE=${SOURCE}" \
-    -e "DOWNLOAD_REPO_ID=${REPO_ID}" \
-    -e "DOWNLOAD_REVISION=${REVISION}" \
-    "${IMAGE}" \
-    python -c "${PYTHON_CODE}"
-set +x
+local_dir = snapshot_download(
+    model_id="${REPO_ID}",
+    revision="${REVISION}" or None,
+    cache_dir="${MODELSCOPE_CACHE_DIR}",
+)
+print(local_dir)
+PY
+fi
 
 echo ""
 echo -e "${GREEN}✓ Model download completed${NC}"
