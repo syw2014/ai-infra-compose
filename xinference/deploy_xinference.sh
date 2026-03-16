@@ -45,12 +45,12 @@ echo ""
 # Step 3: Pull image and start service
 echo -e "${YELLOW}Step 3: Pulling Xinference image...${NC}"
 
-sudo docker compose pull
+docker compose pull
 
 echo ""
 echo -e "${YELLOW}Step 4: Starting Xinference service...${NC}"
 
-sudo docker compose up -d
+docker compose up -d
 
 echo ""
 
