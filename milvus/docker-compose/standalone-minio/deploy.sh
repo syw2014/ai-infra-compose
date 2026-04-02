@@ -4,7 +4,11 @@
 ###
 
 set -e
-cd "$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
+
+cd "$SCRIPT_DIR"
+source "${ROOT_DIR}/scripts/compose_cmd.sh"
 
 if [ ! -f .env ]; then
   echo "Creating .env from .env.example..."
@@ -15,7 +19,7 @@ fi
 chmod +x create_volumes.sh
 ./create_volumes.sh
 
-docker compose up -d
+compose up -d
 
 echo ""
 echo "Milvus Compose deployment started."

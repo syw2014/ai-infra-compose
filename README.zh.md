@@ -13,7 +13,7 @@
 ## 使用方法
 1) 选择组件目录；如果该组件提供多种部署模式，先进入对应的预设子目录。
 2) 先阅读该预设目录下的 `README.md`，按其中定义的入口执行。
-3) 对于 Compose 方案，调整端口、密码和卷，将密钥保存在本地 `.env`，然后执行 `docker compose up -d`。
+3) 对于 Compose 方案，调整端口、密码和卷，将密钥保存在本地 `.env`，然后执行 `docker compose up -d` 或 `docker-compose up -d`。
 4) 对于脚本方案，执行提供的辅助脚本，例如 `./deploy.sh` 或 `./standalone.sh start`。
 5) 组合多个服务时，共用项目名（`-p ai-infra`）和网络。
 

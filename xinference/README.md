@@ -147,15 +147,23 @@ curl http://localhost:9997/v1/rerank \
 ```bash
 # 查看日志
 docker compose logs -f xinference
+# 或
+docker-compose logs -f xinference
 
 # 重启服务
 docker compose restart xinference
+# 或
+docker-compose restart xinference
 
 # 停止服务
 docker compose down
+# 或
+docker-compose down
 
 # 停止并清除数据卷（会删除已下载的模型缓存）
 docker compose down -v
+# 或
+docker-compose down -v
 ```
 
 ## 资源参考

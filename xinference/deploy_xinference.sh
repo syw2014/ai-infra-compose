@@ -7,7 +7,11 @@
 ###
 
 set -e
-cd "$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+cd "$SCRIPT_DIR"
+source "${ROOT_DIR}/scripts/compose_cmd.sh"
 
 # Colors
 RED='\033[0;31m'
@@ -45,12 +49,12 @@ echo ""
 # Step 3: Pull image and start service
 echo -e "${YELLOW}Step 3: Pulling Xinference image...${NC}"
 
-docker compose pull
+compose pull
 
 echo ""
 echo -e "${YELLOW}Step 4: Starting Xinference service...${NC}"
 
-docker compose up -d
+compose up -d
 
 echo ""
 
@@ -74,7 +78,7 @@ if [ "$READY" = true ]; then
     echo -e "${GREEN}✓ Xinference is healthy and responding${NC}"
 else
     echo -e "${YELLOW}⚠️  Xinference has not responded yet (may still be initializing)${NC}"
-    echo -e "${YELLOW}   Run: docker compose logs -f xinference${NC}"
+    echo -e "${YELLOW}   Run: $(printf '%s ' "${COMPOSE_CMD[@]}")logs -f xinference${NC}"
 fi
 
 echo ""
@@ -98,10 +102,10 @@ echo "  # Or use the web UI to manage models:"
 echo "  open http://localhost:9997/ui"
 echo ""
 echo -e "${BLUE}Management Commands:${NC}"
-echo "  View logs:        docker compose logs -f xinference"
-echo "  Restart:          docker compose restart xinference"
-echo "  Stop:             docker compose down"
-echo "  Cleanup volumes:  docker compose down -v"
+echo "  View logs:        $(printf '%s ' "${COMPOSE_CMD[@]}")logs -f xinference"
+echo "  Restart:          $(printf '%s ' "${COMPOSE_CMD[@]}")restart xinference"
+echo "  Stop:             $(printf '%s ' "${COMPOSE_CMD[@]}")down"
+echo "  Cleanup volumes:  $(printf '%s ' "${COMPOSE_CMD[@]}")down -v"
 echo ""
 echo -e "${BLUE}Data Persistence:${NC}"
 echo "  Xinference home:  ./volumes/xinference"

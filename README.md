@@ -12,7 +12,7 @@ Curated Docker Compose presets for common AI application infrastructure (Redis, 
 ## Usage
 1) Pick a component directory and, when multiple presets exist, choose the deployment-mode subdirectory first.
 2) Read that preset's `README.md` and use its entrypoint.
-3) For Compose-based presets, adjust ports, passwords, and volumes, keep secrets in a local `.env`, then run `docker compose up -d`.
+3) For Compose-based presets, adjust ports, passwords, and volumes, keep secrets in a local `.env`, then run `docker compose up -d` or `docker-compose up -d`.
 4) For script-based presets, run the provided helper such as `./deploy.sh` or `./standalone.sh start`.
 5) Combine multiple services by sharing a project name (`-p ai-infra`) and a common network if needed.
 

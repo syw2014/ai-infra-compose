@@ -7,7 +7,11 @@
 ###
 
 set -e
-cd "$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+cd "$SCRIPT_DIR"
+source "${ROOT_DIR}/scripts/compose_cmd.sh"
 
 # 1. Ensure .env exists from env.example
 if [ ! -f .env ]; then
@@ -23,7 +27,8 @@ chmod +x create_pg_volume.sh
 ./create_pg_volume.sh
 
 # 4. Start PostgreSQL
-sudo docker-compose up -d
+COMPOSE_USE_SUDO="${COMPOSE_USE_SUDO:-1}"
+compose up -d
 
 echo ""
 echo "✓ PostgreSQL (pgvector) deployed. Port: 5432"

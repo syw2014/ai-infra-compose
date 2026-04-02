@@ -1,20 +1,25 @@
-# 1. 下载脚本到您的项目目录
+#!/bin/bash
 ###
- # @Author: Jerry Shi
- # @Email: jerryshi0110@gmail.com
- # @Date: 2026-02-06 10:41:47
- # @LastEditors: Jerry Shi
- # @LastEditTime: 2026-02-06 10:44:13
- # @Description: file content
-### 
-# 2. 添加执行权限(如果需要)
-chmod +x setup_redis.sh
+# @Author: Jerry Shi
+# @Email: jerryshi0110@gmail.com
+# @Date: 2026-02-06 10:41:47
+# @LastEditors: Jerry Shi
+# @LastEditTime: 2026-04-02
+# @Description: One-click deploy script for Redis
+###
 
-# 3. 运行脚本
+set -e
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+cd "$SCRIPT_DIR"
+source "${ROOT_DIR}/scripts/compose_cmd.sh"
+
+chmod +x setup_redis.sh
 ./setup_redis.sh
 
-# 4. 启动Redis
-sudo docker-compose up -d
+COMPOSE_USE_SUDO="${COMPOSE_USE_SUDO:-1}"
+compose up -d
 
 echo ""
 echo "✓ Redis deployed."

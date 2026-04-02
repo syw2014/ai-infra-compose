@@ -23,4 +23,4 @@ sudo chown -R 999:999 ./volumes/redis
 echo "✓ 目录创建完成"
 echo "✓ 权限设置完成"
 echo ""
-echo "现在可以运行: docker-compose up -d"
+echo "现在可以运行 deploy_redis.sh，脚本会自动选择 docker compose 或 docker-compose。"

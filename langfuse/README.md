@@ -57,10 +57,15 @@ Use the management script for common operations:
 Or use Docker Compose directly:
 ```bash
 docker compose ps               # Status
+docker-compose ps              # Status
 docker compose logs -f          # All logs
+docker-compose logs -f         # All logs
 docker compose logs -f langfuse-web   # Web logs
+docker-compose logs -f langfuse-web   # Web logs
 docker compose restart          # Restart all
+docker-compose restart         # Restart all
 docker compose down             # Stop and remove
+docker-compose down            # Stop and remove
 ```
 
 ## Service Architecture
@@ -105,8 +110,11 @@ docker compose down             # Stop and remove
 
 ```bash
 docker compose logs -f langfuse-web
+docker-compose logs -f langfuse-web
 docker compose logs -f langfuse-worker
+docker-compose logs -f langfuse-worker
 docker compose logs -f clickhouse
+docker-compose logs -f clickhouse
 ```
 
 ### Common Issues
@@ -118,6 +126,8 @@ docker ps | grep postgres
 
 # Test connection from Langfuse container
 docker compose exec langfuse-web sh -c "nc -zv host.docker.internal 5432"
+# 或
+docker-compose exec langfuse-web sh -c "nc -zv host.docker.internal 5432"
 
 # Check DATABASE_URL in .env
 grep DATABASE_URL .env
@@ -138,6 +148,8 @@ docker exec milvus-minio mc ls local/langfuse
 ```bash
 # Check logs
 docker compose logs clickhouse
+# 或
+docker-compose logs clickhouse
 
 # Test health endpoint
 curl http://localhost:19533/ping
@@ -171,6 +183,9 @@ curl http://localhost:19533/ping
 # Or manually:
 # docker compose pull
 # docker compose up -d
+# 或
+# docker-compose pull
+# docker-compose up -d
 ```
 
 ## Security Notes
@@ -196,6 +211,8 @@ CLICKHOUSE_NATIVE_PORT=9900     # ClickHouse native (changed from 9000 to avoid 
 
 ```bash
 docker compose down -v                              # Remove containers and volumes
+# 或
+docker-compose down -v                              # Remove containers and volumes
 docker exec postgres psql -U postgres -c "DROP DATABASE langfuse;"  # Drop database
 docker exec milvus-minio mc rm -r --force local/langfuse            # Delete bucket
 rm -rf .env .secrets backups/                       # Remove config and backups
@@ -211,5 +228,5 @@ rm -rf .env .secrets backups/                       # Remove config and backups
 
 For issues:
 1. Run `./health_check.sh` to diagnose
-2. Check logs: `docker compose logs`
+2. Check logs: `docker compose logs` or `docker-compose logs`
 3. See [README-DETAILED.md](./README-DETAILED.md) for comprehensive troubleshooting

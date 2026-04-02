@@ -12,4 +12,4 @@ mkdir -p "${DOCKER_VOLUME_BASE_DIR}/volumes/minio"
 mkdir -p "${DOCKER_VOLUME_BASE_DIR}/volumes/milvus"
 
 echo "Milvus volume directories created successfully."
-echo "You can now run 'docker compose up -d' from milvus/docker-compose/standalone-minio."
+echo "You can now run './deploy.sh' from milvus/docker-compose/standalone-minio."

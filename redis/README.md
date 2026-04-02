@@ -13,10 +13,16 @@ mkdir -p ./volumes/redis
 sudo chown -R 999:999 ./volumes/redis
 
 # 3. 启动服务
+docker compose up -d
+# 或
 docker-compose up -d
 
 # 4. 查看状态
+docker compose ps
+# 或
 docker-compose ps
 
 # 5. 查看日志
+docker compose logs -f redis
+# 或
 docker-compose logs -f redis

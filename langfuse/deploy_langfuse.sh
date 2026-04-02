@@ -7,7 +7,11 @@
 ###
 
 set -e
-cd "$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+cd "$SCRIPT_DIR"
+source "${ROOT_DIR}/scripts/compose_cmd.sh"
 
 # Colors
 RED='\033[0;31m'
@@ -236,10 +240,10 @@ echo ""
 # Step 5: Pull and start services
 echo -e "${YELLOW}Step 5: Starting Langfuse services...${NC}"
 
-docker compose pull
+compose pull
 echo ""
 
-docker compose up -d
+compose up -d
 
 echo ""
 
@@ -249,11 +253,11 @@ echo "Waiting for services to start..."
 sleep 10
 
 # Check if containers are running
-if docker compose ps | grep -q "Up"; then
+if compose ps | grep -q "Up"; then
     echo -e "${GREEN}✓ Containers are running${NC}"
 else
     echo -e "${RED}✗ Some containers failed to start${NC}"
-    echo "Run 'docker compose logs' to see errors"
+    echo "Run '$(printf '%s ' "${COMPOSE_CMD[@]}")logs' to see errors"
 fi
 
 # Check ClickHouse
@@ -286,15 +290,15 @@ echo "  MinIO:       ${MINIO_HOST}:${MINIO_PORT}"
 echo ""
 echo -e "${BLUE}Next Steps:${NC}"
 echo "  1. Wait 30-60 seconds for full initialization"
-echo "  2. View logs:         docker compose logs -f"
-echo "  3. Check status:      docker compose ps"
+echo "  2. View logs:         $(printf '%s ' "${COMPOSE_CMD[@]}")logs -f"
+echo "  3. Check status:      $(printf '%s ' "${COMPOSE_CMD[@]}")ps"
 echo "  4. Open Langfuse:     http://localhost:19532"
 echo ""
 echo -e "${BLUE}Management Commands:${NC}"
-echo "  View logs:        docker compose logs -f langfuse-web"
-echo "  Restart:          docker compose restart"
-echo "  Stop:             docker compose down"
-echo "  Cleanup volumes:  docker compose down -v"
+echo "  View logs:        $(printf '%s ' "${COMPOSE_CMD[@]}")logs -f langfuse-web"
+echo "  Restart:          $(printf '%s ' "${COMPOSE_CMD[@]}")restart"
+echo "  Stop:             $(printf '%s ' "${COMPOSE_CMD[@]}")down"
+echo "  Cleanup volumes:  $(printf '%s ' "${COMPOSE_CMD[@]}")down -v"
 echo ""
 echo -e "${YELLOW}Important Files:${NC}"
 echo "  Configuration:    .env"
