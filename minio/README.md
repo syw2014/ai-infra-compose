@@ -5,7 +5,7 @@ Single-node MinIO preset following the same layout as other Compose-based compon
 ## Files
 - `docker-compose.yml` - MinIO service definition.
 - `env.example` - Default environment template. Copy to `.env` before deployment.
-- `setup_minio.sh` - Creates local data directories.
+- `create_minio_volume.sh` - Creates local volume directories.
 - `deploy_minio.sh` - One-click deployment entrypoint.
 
 ## Quick Start
@@ -19,7 +19,7 @@ Single-node MinIO preset following the same layout as other Compose-based compon
    ```
 3. Deploy MinIO:
    ```bash
-   chmod +x deploy_minio.sh setup_minio.sh
+   chmod +x deploy_minio.sh create_minio_volume.sh
    ./deploy_minio.sh
    ```
 
@@ -29,6 +29,7 @@ Single-node MinIO preset following the same layout as other Compose-based compon
 
 ## Notes
 - The deployment script uses the shared Compose wrapper and automatically picks `docker compose` or `docker-compose`.
-- Persistent data is stored in `./volumes/data`.
+- Persistent data is stored in `${DOCKER_VOLUME_DIRECTORY:-.}/volumes/minio`.
+- Set `DOCKER_VOLUME_DIRECTORY` before deployment if you want to place local volumes under another base directory.
 - Keep secrets in `.env` and do not commit local credentials.
 - For production, change default credentials, restrict exposed ports, and place MinIO behind TLS or a trusted network boundary.

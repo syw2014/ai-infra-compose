@@ -19,8 +19,8 @@ if [ ! -f .env ]; then
   echo "⚠️  Please edit .env to set MINIO_ROOT_PASSWORD and ports if needed."
 fi
 
-chmod +x setup_minio.sh
-./setup_minio.sh
+chmod +x create_minio_volume.sh
+./create_minio_volume.sh
 
 COMPOSE_USE_SUDO="${COMPOSE_USE_SUDO:-1}"
 compose up -d
@@ -29,4 +29,4 @@ echo ""
 echo "✓ MinIO deployed."
 echo "  S3 API:      http://localhost:${MINIO_API_PORT:-9000}"
 echo "  Web console: http://localhost:${MINIO_CONSOLE_PORT:-9001}"
-echo "  Data:        ./volumes/data"
+echo "  Data:        ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/minio"
