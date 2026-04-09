@@ -36,7 +36,7 @@ detect_compose_cmd() {
 }
 
 compose() {
-    if [ "${#COMPOSE_CMD[@]:-0}" -eq 0 ]; then
+    if ! declare -p COMPOSE_CMD >/dev/null 2>&1 || [ "${#COMPOSE_CMD[@]}" -eq 0 ]; then
         detect_compose_cmd
     fi
 

@@ -75,9 +75,35 @@ run_case() {
     rm -rf "$bin_dir"
 }
 
+run_lazy_detection_case() {
+    local expected=$1
+    local docker_available=$2
+    local docker_compose_available=$3
+    local use_sudo=$4
+    local bin_dir
+
+    bin_dir="$(mktemp -d)"
+    make_stub_bin "$bin_dir"
+
+    PATH="${bin_dir}:$PATH" \
+    DOCKER_COMPOSE_AVAILABLE="$docker_available" \
+    DOCKER_COMPOSE_V1_AVAILABLE="$docker_compose_available" \
+    COMPOSE_USE_SUDO="$use_sudo" \
+    bash -c "
+      set -euo pipefail
+      source \"$HELPER_PATH\"
+      compose version >/dev/null 2>&1
+      printf '%s' \"\${COMPOSE_CMD[*]}\"
+    " > "${bin_dir}/result.txt"
+
+    assert_eq "$expected" "$(cat "${bin_dir}/result.txt")" "compose should lazily detect command without bad substitution"
+    rm -rf "$bin_dir"
+}
+
 run_case "docker compose" 1 1 0
 run_case "docker-compose" 0 1 0
 run_case "sudo docker compose" 1 0 1
 run_case "sudo docker-compose" 0 1 1
+run_lazy_detection_case "docker compose" 1 0 0
 
 echo "compose_cmd_test.sh: all cases passed"
